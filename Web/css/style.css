@@ -1,0 +1,544 @@
+.ui-autocomplete {
+  z-index: 2000;
+}
+
+.clearfix:after {
+  content:"";
+  display:table;
+  clear:both;
+}
+
+html {
+  width: 100%;
+}
+
+body {
+  width: 680px;
+  margin: auto;
+  font-family: "Microsoft Yahei";
+  color: #666;
+}
+
+.header {
+  margin-top: 32px;
+  margin-bottom: 8px;
+}
+.header .name {
+  font-size: 32px;
+  letter-spacing: 4px;
+  color: #737373;
+}
+.header .name .first {
+  font-size: 48px;
+}
+
+.info {
+  font-size: 0;
+}
+.info > div {
+  font-size: 12px;
+  overflow: hidden;
+}
+
+.my {
+  transition: .3s;
+  width: 100px;
+  height: 100px;
+  margin-right: 10px;
+  float: left;
+  overflow: hidden;
+  padding: 20px;
+  background: #f9f9f9;
+  border: 1px solid #eaeaea;
+  white-space: nowrap;
+}
+.my .avatar {
+  display: inline-block;
+  vertical-align: middle;
+}
+.my:hover {
+  transition: .3s;
+  width: 200px;
+}
+.my .avatar > img {
+  width: 100px;
+  height: 100px;
+  vertical-align: middle;
+}
+.my .menu {
+  list-style: none;
+  height: 100px;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 0 0 20px;
+  padding: 0;
+}
+.my .menu li {
+  display: block;
+  margin: 7px 0 0 0;
+  padding: 0;
+}
+.my .menu #view-self {
+  display: none;
+}
+
+.my .menu .action:hover {
+  cursor: pointer;
+  color: #333;
+}
+.my .menu .marked {
+  color: #fea540;
+  cursor: default;
+}
+
+.score, .radialchart {
+  height: 140px;
+  margin-left: 0;
+  border: 1px solid #eaeaea;
+}
+.radialchart {
+  float: right;
+}
+.score {
+  border-right: none;
+}
+.score .title,
+.score .score-list,
+.score .score-item {
+  width: 100%;
+}
+.score .title {
+  font-size: 0;
+  position: relative;
+}
+.score .timerange {
+  margin-top: 5px;
+  margin-left: 5px;
+  position: absolute;
+  width: 140px;
+  font-size: 12px;
+  z-index: 2;
+  background: white;
+}
+.score .timerange .daycount{
+  color: #FEA540;
+  font-size: 24px;
+}
+.score .statusicons {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 72px;
+  line-height: 72px;
+  position: absolute;
+  right: 20px;
+}
+.score .statusicon {
+  transition: .3s;
+  vertical-align: bottom;
+  display: inline-block;
+  width: 58px;
+  height: 60px;
+  background-size: 120px 90px !important;
+  opacity: 0.2;
+}
+.score .statusicon-good {
+  margin-right: 27px;
+  background: url(../img/icon-good.png) no-repeat center center;
+}
+.score .statusicon-warning {
+  margin-right: 27px;
+  background: url(../img/icon-warning.png) no-repeat center center;
+}
+.score .statusicon-damnit {
+  background: url(../img/icon-damnit.png) no-repeat center center;
+}
+.score .statusicon.current {
+  opacity: 1;
+}
+.my:hover + .radialchart + .score .statusicon:not(.current) {
+  transition: .3s;
+  opacity: 0;
+  width: 0;
+  height: 30px;
+  margin-right: 0;
+}
+.my:hover + .radialchart + .score .statusicon.current {
+  transition: .3s;
+  margin-right: 40px;
+}
+.score .title {
+  height: 72px;
+  border-bottom: 1px solid #eaeaea;
+}
+.score .score-list {
+  display: block;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+.score .score-list hr {
+  border: none;
+  padding: 0;
+  margin: 0;
+  height: 0;
+  width: 86%;
+  margin-left: 8%;
+  border-top: 1px solid #eaeaea;
+  text-align: center;
+}
+.score .score-item {
+  list-style: none;
+  display: block;
+  height: 23px;
+  font-size: 0;
+  margin-top: -1px;
+  width: 100%;
+  position: relative;
+}
+.score .score-item > div{
+  font-size: 12px;
+  vertical-align: middle;
+}
+.score .score-item .score-icon {
+  transition: .3s;
+  border-radius: 100%;
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  top: 5px;
+  left: 8px;
+}
+.score .score-item-workload .score-icon {
+  background-color: #FEA540;
+}
+.score .score-item-efficiency .score-icon {
+  background-color: #60AED0;
+}
+.score .score-item-cooperative .score-icon {
+  background-color: #FE6440;
+}
+.score .score-item .score-title {
+  margin-left: 8%;
+  width: 60px;
+  text-align: center;
+  float: left;
+}
+.score .score-item .score-detail {
+  text-align: center;
+}
+.score .score-item .score-average {
+  width: 80px;
+  text-align: cener;
+  margin-right: 8%;
+  float: right;
+}
+.score .score-item div:not(.score-icon) {
+  /*border-top: 1px solid #eaeaea;*/
+  padding-top: 3px;
+}
+
+.radialchart {
+  width: 140px;
+  position: relative;
+}
+.radialchart-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -16px;
+  margin-top: -16px;
+  text-align: center;
+}
+.radialchart-text .otherscore {
+  color: #FEA540;
+  font-size: 16px;
+  width: 32px;
+  border-bottom: 1px solid #FEA540;
+}
+.radialchart-text .totalscore {
+  font-size: 12px;
+  color: #adadad;
+}
+
+.barchart {
+  border: 1px solid #eaeaea;
+  margin-top: 20px;
+  position: relative;
+}
+.barchart .item-selector {
+  position: absolute;
+  top: 30px;
+  right: 20px;
+  cursor: pointer;
+  padding: 0px 4px;
+  border: 1px solid #eaeaea;
+  background: white;
+  z-index: 2;
+  box-shadow: 0 1px white;
+}
+.barchart .item-selector-list {
+  position: absolute;
+  top: 52px;
+  right: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: white;
+  border: 1px solid #eaeaea;
+  display: none;
+}
+.barchart .item-selector-list li {
+  padding: 0;
+  margin: 0;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.barchart .item-selector-list li:hover {
+  background: #fdf5ce;
+}
+.barchart .title {
+  background: #f9f9f9;
+  border-bottom: 1px solid #eaeaea;
+  height: 24px;
+  font-size: 12px;
+}
+.barchart .title .name {
+  float: left;
+  margin-left: 5px;
+  color: #FEA540;
+  line-height: 24px;
+  height: 24px
+}
+.barchart .title .legend {
+  display: block;
+  float: right;
+  margin: 0 5px 0 0;
+  padding: 0;
+  color: #FEA540;
+  line-height: 24px;
+  height: 24px;
+}
+.barchart .title .legend dt {
+  vertical-align: middle;
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin: 0 0 0 5px;
+  padding: 0;
+}
+.barchart .title .legend .self-score {
+  background: #FED29F;
+}
+.barchart .title .legend .other-score {
+  background: #FEA540;
+  border-radius: 100%;
+}
+.barchart .title .legend dd {
+  display: inline-block;
+  margin: 0 0 0 5px;
+  vertical-align: middle;
+}
+.barchart .foot{
+  width: 100%;
+  height: 30px;
+  border-top: 1px solid #eaeaea;
+}
+.barchart .foot .dayslider,
+.barchart .foot .dayindextext {
+  float: right;
+}
+.barchart .foot .dayslider {
+  width: 200px;
+  margin: 8px;
+}
+.barchart .foot .dayindextext {
+  vertical-align: middle;
+  margin-top: 7px;
+  font-size: 12px;
+  color: #919191;
+  margin-right: 20px;
+}
+.barchart .foot .dayindex {
+  color: #FEA540;
+}
+.barchart .chart {
+  height: 300px;
+  text-align: center;
+  vertical-align: bottom;
+}
+
+.barchart .chart rect {
+  fill: #FED29F;
+}
+
+.barchart .chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: middle;
+}
+.axis text {
+  font: 10px sans-serif;
+}
+
+.barchart .chart .y.axis path {
+  fill: none;
+}
+.barchart .chart .y.axis text {
+  fill: #FEA540;
+  font: 10px "Microsoft Yahei";
+  text-anchor: middle;
+}
+
+.barchart .chart circle {
+  fill: #FEA540;
+}
+
+
+.dialog {
+  border-radius: 0;
+  border: 1px solid #eaeaea;
+  padding: 0;
+}
+.dialog .ui-dialog-body,
+.dialog .ui-dialog-content {
+  padding: 0;
+}
+
+.select-user-dialog,
+.mark-dialog {
+  margin: 20px;
+  width: 300px;
+  color: #666;
+}
+.select-user-dialog div,
+.mark-dialog div {
+  padding: 0;
+  margin: 0;
+}
+.select-user-dialog .header,
+.mark-dialog .header {
+  width: 100%;
+  height: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #666;
+}
+.select-user-dialog .title,
+.mark-dialog .title {
+  font-size: 14px;
+  float: left;
+  line-height: 20px;
+}
+.select-user-dialog .btn-group,
+.mark-dialog .btn-group {
+  float: right;
+}
+.select-user-dialog .btn-group > div,
+.mark-dialog .btn-group > div {
+  margin: 0 0 0 5px;
+  font-size:12px;
+  line-height: 12px;
+  padding: 3px;
+  border: 1px solid;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+}
+.select-user-dialog .btn-ok,
+.mark-dialog .btn-ok {
+  color: #33b834;
+  border-color: #33b834;
+}
+.select-user-dialog .btn-ok:hover,
+.mark-dialog .btn-ok:hover {
+  transition: .1s;
+  color: #fff;
+  background-color: #33b834;
+  border: #33b834 1px solid;
+}
+.select-user-dialog .btn-close,
+.mark-dialog .btn-close {
+  padding: 0 5px;
+  color: #f32725;
+  border-color: #f32725;
+}
+.select-user-dialog .btn-close:hover,
+.mark-dialog .btn-close:hover {
+  transition: .1s;
+  color: #fff;
+  background-color: #f32725;
+  border: #f32725 1px solid;
+}
+.mark-dialog .mark-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.select-user-dialog .user-selector,
+.mark-dialog .user-selector {
+  margin-top: 20px;
+}
+.mark-dialog .mark-item {
+  padding: 0;
+  margin: 20px 0;
+  height: 20px;
+}
+.mark-dialog .mark-item > div {
+  display: inline-block;
+  line-height: 20px;
+  vertical-align: middle;
+}
+.mark-dialog .mark-item .mark-name {
+  width: 60px;
+  margin-right: 10px;
+}
+.mark-dialog .mark-item .mark-icon {
+  transition: .3s;
+  border-radius: 100%;
+  width: 14px;
+  height: 14px;
+}
+.mark-dialog .mark-item-workload .mark-icon {
+  background-color: #FEA540;
+}
+.mark-dialog .mark-item-efficiency .mark-icon {
+  background-color: #60AED0;
+}
+.mark-dialog .mark-item-cooperative .mark-icon {
+  background-color: #FE6440;
+}
+.mark-dialog .mark-item .mark-bar {
+  width: 196px;
+}
+.mark-dialog .mark-item .mark-bar-item {
+  width: 14px;
+  margin-right: 2px;
+  height: 2px;
+  border: 1px solid;
+  vertical-align: middle;
+  display: inline-block;
+  cursor: pointer;
+}
+.mark-dialog .mark-item-workload .mark-bar-item {
+  border-color: #FEA540;
+}
+.mark-dialog .mark-item-efficiency .mark-bar-item {
+  border-color: #60AED0;
+}
+.mark-dialog .mark-item-cooperative .mark-bar-item {
+  border-color: #FE6440;
+}
+.mark-dialog .mark-item-workload .mark-bar-item.highlight,
+.mark-dialog .mark-item-workload .mark-bar-item.selected {
+  background-color: #FEA540;
+}
+.mark-dialog .mark-item-efficiency .mark-bar-item.highlight,
+.mark-dialog .mark-item-efficiency .mark-bar-item.selected {
+  background-color: #60AED0;
+}
+.mark-dialog .mark-item-cooperative .mark-bar-item.highlight,
+.mark-dialog .mark-item-cooperative .mark-bar-item.selected {
+  background-color: #FE6440;
+}
