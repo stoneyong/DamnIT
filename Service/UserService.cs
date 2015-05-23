@@ -232,7 +232,8 @@ namespace Service
         public static string GetUserList(string param)
         {
             string url = WebServiceConfig.user_search_send_url;
-            url += "?access_token=" + HttpContext.Current.Request.Cookies.Get("access_token").Value;
+           url += "?access_token=" + HttpContext.Current.Request.Cookies.Get("access_token").Value;
+          ///  url += "?access_token="+
             url += "&keywords=" + param;
             url += "&pageindex=1";
             url += "&pagesize=20";
