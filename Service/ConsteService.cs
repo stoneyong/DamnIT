@@ -13,8 +13,9 @@ namespace Service
 {
     public class ConsteService
     {
+        #region  获取星座
         static Dictionary<string, ConstellationEntity> DicCache = new Dictionary<string, ConstellationEntity>();
-        public static ConstellationEntity GetConsByApi(string consName)
+        private static ConstellationEntity GetConsByApi(string consName)
         {
             string url = HaoServiceConfig.HaoServiceUrl;
             url += "?key="+HaoServiceConfig.key;
@@ -52,7 +53,14 @@ namespace Service
             catch { }
             if (cons == null)
             {
-                cons = GetConsByNameFromDb(consName);
+                if (DicCache.ContainsKey(consName))
+                {
+                    cons = DicCache[consName];
+                }
+                else
+                {
+                    cons = GetConsByNameFromDb(consName);
+                }
             }
             
             return cons;
@@ -74,12 +82,30 @@ namespace Service
             return resultCons;
         }
 
+        public static ConstellationEntity GetCons(DateTime birthday)
+        {
+            string consName = GetConsteNameByDate(birthday);
+            return GetCons(consName);
+        }
+        
+        /// <summary>
+        /// 初始化化所有星座当天运势
+        /// </summary>
+        public static void  InitAllCons()
+        {
+            string[] consArray=new string[]{"白羊座","金牛座","双子座","巨蟹座","狮子座","处女座","天秤座","天蝎座","射手座","魔蝎座","水瓶座","双鱼座"};
+            foreach(var item in consArray)
+            {
+                GetCons(item);
+            }
+        }
+
         /// <summary>
         /// 获取星座
         /// </summary>
         /// <param name="birthday"></param>
         /// <returns></returns>
-        public static string GetConsteByDate(DateTime birthday)
+        public static string GetConsteNameByDate(DateTime birthday)
         {
             float birthdayF = 0.00F;
 
@@ -127,11 +153,77 @@ namespace Service
                 .Query<ConstellationEntity>(sql, new { @Name = name }).FirstOrDefault<ConstellationEntity>();
             return result;
         }
+        #endregion
 
-        //public static ConstellationEntity GetConsFromApi(DateTime birthDay)
+        #region 获取用户
+        /// <summary>
+        /// 获取用户基本信息
+        /// </summary>
+        /// <returns></returns>
+        public static UserConsEntity GetUserConsByUserId(string userID, string accessToken)
+        {
+            var result = DataAccess.ConsConnection()
+                .Query<UserConsEntity>("SELECT * FROM dbo.ConUser WHERE UserID = @UserID", new { @UserID = userID }).SingleOrDefault<UserConsEntity>();
+            if (result == null)
+            {
+                string url = WebServiceConfig.user_get_url;
+               // url += "?access_token=" + HttpContext.Current.Request.Cookies.Get("access_token").Value;
+                url += "?access_token=" + accessToken;
+                url += "&u_id=" + userID;
+                url += "&format=" + WebServiceConfig.format;
+
+                string resultUser = HttpHandle.RequestGet(url);
+
+                var jUser = (JsonConvert.DeserializeObject(resultUser) as JObject)["user"];
+                result = new UserConsEntity()
+                {
+                    ImgUrl = jUser["avatar100"].ToString(),
+                    UserID = new Guid(jUser["id"].ToString()),
+                    UserName = jUser["name"].ToString(),
+                    BirthDay = DateTime.Parse(jUser["birthday"].ToString()),
+                    Age = DateTime.Now.Year - DateTime.Parse(jUser["birthday"].ToString()).Year,
+                    ConsName = GetConsteNameByDate(DateTime.Parse(jUser["birthday"].ToString())),
+                };
+                UserConsInsert(result);
+            }
+            return result;
+        }
+
+        public static int UserConsInsert(UserConsEntity user)
+        {
+            return DataAccess.OpenConnection()
+                .Execute("INSERT INTO dbo.ConUser ( UserID, UserName, ImgUrl,BirthDay,Age,ConsName ) VALUES  ( @UserID,@UserName,@ImgUrl,@BirthDay,@Age,@ConsName)"
+                , new { @UserID = user.UserID, @UserName = user.UserName, @ImgUrl = user.ImgUrl,@BirthDay=user.BirthDay,@Age=user.Age,@ConsName=user.ConsName });
+        }
+
+        //public static UserConsEntity GetGoodLuckUser()
         //{
-        //    var consName = GetConsteByDate(birthDay);
-
+        //    var list= DicCache.Values.ToList<ConstellationEntity>().OrderByDescending(m => int.Parse(m.All.Trim('%')));
         //}
+
+        #endregion
+
+        #region 获取ViewModel
+        public static ViewModelCons GetViewModelByUserId(string userId, string accessToken)
+        {
+            var result = new ViewModelCons();
+            result.resultFlag = "0";
+            try
+            {
+                UserConsEntity userCons = GetUserConsByUserId(userId, accessToken);
+                if (userCons != null)
+                {
+
+                    result.CurrentUserID = userCons.UserID;
+                    result.CurrentUserConsEntity = userCons;
+                    result.CurrentConsteEntity = GetCons(userCons.ConsName);
+                    result.resultFlag = "1";
+                }
+            }
+            catch { }
+            return result;
+        }
+        #endregion
+
     }
 }
