@@ -189,6 +189,45 @@ namespace Service
             return result;
         }
 
+        public static List<UserConsEntity> GetUserConsByConsName(string consName)
+        {
+            var result = DataAccess.ConsConnection()
+                .Query<UserConsEntity>("SELECT * FROM dbo.ConUser WHERE ConsName = @ConsName", new { @ConsName = consName }).ToList<UserConsEntity>();
+            return result;
+        }
+
+        public static List<UserConsEntity> GetUserConsByConsNameSex(string consName, string sex)
+        {
+            var result = DataAccess.ConsConnection()
+                .Query<UserConsEntity>("SELECT * FROM dbo.ConUser WHERE ConsName = @ConsName And Sex=@Sex", new { @ConsName = consName, @Sex=sex }).ToList<UserConsEntity>();
+            return result;
+        }
+
+        public static void InitAllUserCons(string accessToken)
+        {
+              string url = WebServiceConfig.user_search_send_url;
+           url += "?access_token=" + accessToken;
+          ///  url += "?access_token="+
+            url += "&keywords=''";
+            url += "&pageindex=1";
+            url += "&pagesize=20";
+            url += "&format=" + WebServiceConfig.format;
+
+            string resultUser = HttpHandle.RequestGet(url);
+            var jUser = (JsonConvert.DeserializeObject(resultUser) as JObject)["user"];
+                var result = new UserConsEntity()
+                {
+                    ImgUrl = jUser["avatar100"].ToString(),
+                    UserID = new Guid(jUser["id"].ToString()),
+                    UserName = jUser["name"].ToString(),
+                    BirthDay = DateTime.Parse(jUser["birthday"].ToString()),
+                    Age = DateTime.Now.Year - DateTime.Parse(jUser["birthday"].ToString()).Year,
+                    ConsName = GetConsteNameByDate(DateTime.Parse(jUser["birthday"].ToString())),
+                };
+                UserConsInsert(result);
+           
+        }
+
         public static int UserConsInsert(UserConsEntity user)
         {
             return DataAccess.OpenConnection()
@@ -196,10 +235,31 @@ namespace Service
                 , new { @UserID = user.UserID, @UserName = user.UserName, @ImgUrl = user.ImgUrl,@BirthDay=user.BirthDay,@Age=user.Age,@ConsName=user.ConsName });
         }
 
-        //public static UserConsEntity GetGoodLuckUser()
-        //{
-        //    var list= DicCache.Values.ToList<ConstellationEntity>().OrderByDescending(m => int.Parse(m.All.Trim('%')));
-        //}
+        /// <summary>
+        /// 福星高照
+        /// </summary>
+        /// <returns></returns>
+        public static UserConsEntity GetGoodLuckUser()
+        {
+            ConstellationEntity cons = DicCache.Values.OrderByDescending(m => int.Parse(m.All.Trim('%'))).FirstOrDefault();
+            string consName = cons.Name;
+            var GoodLuckUsers = GetUserConsByConsName(consName);
+            UserConsEntity goodUsers = GoodLuckUsers.OrderBy(m => m.Age).FirstOrDefault();
+            return goodUsers;
+        }
+
+        /// <summary>
+        /// 献出一点爱用户
+        /// </summary>
+        /// <param name="consName"></param>
+        /// <param name="sex"></param>
+        /// <returns></returns>
+        public static UserConsEntity GetMissUser(string consName, string sex)
+        {
+            var MissUsers = GetUserConsByConsNameSex(consName, sex);
+            UserConsEntity missUsers = MissUsers.OrderBy(m => m.Age).FirstOrDefault();
+            return missUsers;
+        }
 
         #endregion
 
@@ -217,6 +277,8 @@ namespace Service
                     result.CurrentUserID = userCons.UserID;
                     result.CurrentUserConsEntity = userCons;
                     result.CurrentConsteEntity = GetCons(userCons.ConsName);
+
+
                     result.resultFlag = "1";
                 }
             }
