@@ -24,6 +24,11 @@ namespace Common
             return new SqlConnection("server=115.28.108.146,8000;database=DamnIT;uid=B2C;pwd=88403633%@!mmFF");
             //return new SqlConnection("server=.;database=DamnIT;uid=sa;pwd=shuai");
         }
+
+        public static SqlConnection ConsConnection()
+        {
+            return new SqlConnection("server=172.17.10.213;database=test;uid=sa;pwd=123456");
+        }
        
     }
 }

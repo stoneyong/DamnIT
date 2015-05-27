@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{AC1CF1E4-F247-40D4-83B0-5C316E3C3B69}"
 EndProject
@@ -9,10 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entity", "Entity\Entity.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{7B4BCE07-AED7-41E4-834C-AA4C793A5728}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Web(11)", "http://localhost:31795", "{B13ED266-FF0E-4AC2-81C5-9A09DAAC12A1}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Web", "http://localhost:31795", "{B13ED266-FF0E-4AC2-81C5-9A09DAAC12A1}"
 	ProjectSection(WebsiteProperties) = preProject
 		UseIISExpress = "true"
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv3.5"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		ProjectReferences = "{ac1cf1e4-f247-40d4-83b0-5c316e3c3b69}|Common.dll;{2812c215-0788-416a-aa8a-3171d95d197c}|Entity.dll;{7b4bce07-aed7-41e4-834c-aa4c793a5728}|Service.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_31795"
 		Debug.AspNetCompiler.PhysicalPath = "Web\"

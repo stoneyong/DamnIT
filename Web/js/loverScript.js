@@ -1,30 +1,35 @@
 ﻿
 
 $(function () {
-    
-    var Lover = {
-        options:{
 
-        },
+    Lover.init();
 
-        init:function(){
-            this.getInitData();
-        },
 
-        getInitData: function () {
-            $.ajax({
-                url: "",
-                data:{action:"getUserData"},
-                dataType:'JSON',
-                success:function(){
-
-                },
-                error: function () {
-                }
-
-            })
-
-        },
-};
-    return Lover;
+    //return Lover;
 });
+
+var Lover ={
+    options:{
+
+    },
+
+    init:function () {
+        alert("sdkj");
+        this.getInitData();
+    },
+
+    getInitData:function () {
+        $.ajax({
+            url: "/ajax.ashx",
+            data: { action: "getInitData" },
+            dataType:'JSON',
+            success:function(){
+
+            },
+            error: function () {
+            }
+
+        })
+
+    }
+};

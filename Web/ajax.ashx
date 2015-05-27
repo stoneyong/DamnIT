@@ -27,9 +27,18 @@ public class ajax : IHttpHandler {
             case "markuser":
                 MarkUser(context);
                 break;
+            case "getInitData":
+                GetInitData();
+                break;
         }
     }
 
+
+    public void GetInitData() { 
+        
+     var  con=ConsteService.GetViewModelByUserId("4c485619-e958-4c0b-b7fa-3e128721898e");
+    }
+    
     void LoadUser(HttpContext context)
     {
         string uid = context.Request["uid"];

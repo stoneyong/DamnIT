@@ -19,13 +19,13 @@ public partial class loginredirect : System.Web.UI.Page
     {
         string code = Request["code"].ToString();
         string url = "";
-        url += "app_key="+WebServiceConfig.app_Key;
-        url += "&app_secret="+WebServiceConfig.app_Secret;
-        url += "&grant_type=" + WebServiceConfig.grant_type;
+        url += "app_key="+HaoServiceConfig.app_Key;
+        url += "&app_secret=" + HaoServiceConfig.app_Secret;
+        url += "&grant_type=" + HaoServiceConfig.grant_type;
         url += "&code=" + code;
-        url += "&redirect_uri=" + WebServiceConfig.authorize_redirect_uri;
-        url += "&format=" + WebServiceConfig.format;
-        string result = HttpHandle.RequestPost(WebServiceConfig.getaccesstoken_send_url, url);
+        url += "&redirect_uri=" + HaoServiceConfig.authorize_redirect_uri;
+        url += "&format=" + HaoServiceConfig.format;
+        string result = HttpHandle.RequestPost(HaoServiceConfig.getaccesstoken_send_url, url);
         GetAccessToken getAccessToken = Newtonsoft.Json.JsonConvert.DeserializeObject<GetAccessToken>(result);
         //保存accesstoken
         //WebServiceConfig.access_token = getAccessToken.access_token;
@@ -52,23 +52,23 @@ public partial class loginredirect : System.Web.UI.Page
             Response.Cookies.Add(cook);
             userid = user.id;
         }
-        else
-        {
-            userid = UserService.GetUser().UserID.ToString();
-        }
-        //查询用户是否在数据库中，若是不在，则新增
-        UserEntity userEntity = UserService.GetUserByID(userid);
-        if (userEntity == null)
-        {
-            //调用新增方法，添加用户
-            UserEntity paramUser = new UserEntity();
-            paramUser.UserID = new Guid(user.id);
-            paramUser.UserName = user.name;
-            paramUser.ImgUrl = user.avstar100;
-            UserService.UserInsert(paramUser);
-        }
+        //else
+        //{
+        //    userid = UserService.GetUser().UserID.ToString();
+        //}
+        ////查询用户是否在数据库中，若是不在，则新增
+        //UserEntity userEntity = UserService.GetUserByID(userid);
+        //if (userEntity == null)
+        //{
+        //    //调用新增方法，添加用户
+        //    UserEntity paramUser = new UserEntity();
+        //    paramUser.UserID = new Guid(user.id);
+        //    paramUser.UserName = user.name;
+        //    paramUser.ImgUrl = user.avstar100;
+        //    UserService.UserInsert(paramUser);
+        //}
         //跳转到首页
-        Response.Redirect("Index.aspx");
+        Response.Redirect("lover.html");
 
     }
 }
